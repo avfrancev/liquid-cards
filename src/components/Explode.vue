@@ -40,11 +40,11 @@
       cardsCount: 6
 
     created: ->
-      @$metrika.hit('/')
       do @fetchCards
 
     methods:
       fetchCards: ->
+        console.log @$metrika
         @loading = true
         for i in [0...@cardsCount]
 
