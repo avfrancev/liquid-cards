@@ -60,7 +60,7 @@ export class Canvas
   init: (e)	->
     @c = document.createElement 'canvas'
     @ctx = @c.getContext '2d'
-    @$card__image = document.querySelector "#card-#{@card.id} .card__image"
+    @$card__image = document.querySelector "#card-#{@card.id} .thumb"
     @hCanvas = document.createElement 'canvas'
     @hCanvas.width = @$card__image.offsetWidth
     @hCanvas.height = @$card__image.offsetHeight

@@ -31,6 +31,9 @@ export default {
     background: $color1
     margin: 0
 
+  button:focus
+    outline: 0
+
   #app
     font-family: 'Avenir', Helvetica, Arial, sans-serif
     -webkit-font-smoothing: antialiased
