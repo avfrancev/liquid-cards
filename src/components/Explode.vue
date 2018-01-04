@@ -40,6 +40,7 @@
       cardsCount: 6
 
     created: ->
+      @$metrika.hit('/')
       do @fetchCards
 
     methods:
