@@ -46,31 +46,41 @@
       fetchCards: ->
         @loading = true
         for i in [0...@cardsCount]
-          id = new Date().getTime()+i
-          # @cardz.push
-          #   id: id
-          @cards.push
-            id: id
-            author: faker.name.findName()
-            avatar: faker.image.avatar()
-            title: faker.lorem.words()
-            image_src: false
-          do (id) =>
 
-            card = (_i for _i in @cards when _i.id is id)[0]
+          do (i) =>
 
-            axios.get("https://source.unsplash.com/random?sig=#{id}").then((x) =>
+            # card = (_i for _i in @cards when _i.id is id)[0]
+
+            axios.get("https://source.unsplash.com/random?sig=#{i}", {
+              # method: 'GET'
+              # mode: 'no-cors'
+              # headers: {
+              #   'Access-Control-Allow-Origin': '*'
+              #   # 'Content-Type': 'application/json'
+              # }
+              # withCredentials: true
+              # credentials: 'same-origin'
+            }).then((x) =>
               img = new Image
               img.onload = =>
-                @$set @cards, @cards.indexOf(card), {
-                  card...
+                id = new Date().getTime()+i
+                # @cardz.push
+                #   id: id
+                @cards.push
+                  id: id
+                  author: faker.name.findName()
+                  avatar: faker.image.avatar()
+                  title: faker.lorem.words()
                   image_src: x.request.responseURL
-                }
+                # @$set @cards, @cards.indexOf(card), {
+                #   card...
+                #   image_src: x.request.responseURL
+                # }
               img.src = x.request.responseURL
               return
-            ).catch (err) =>
-              console.log err
-              @$delete @cards, @cards.indexOf(card)
+            )
+            # ).catch (err) =>
+              # @$delete @cards, @cards.indexOf(card)
 
 
 
@@ -221,9 +231,13 @@
           transform: perspective(500px) rotateY(10deg) rotateX(0deg) scale(1.05)
           // transform: rotateX(50deg)
           // background-size: 120%
+          &::after
+            opacity: 1
+            // background-size: 100% 100%
+
         section.btn-group
           button
-            transform: translateY(-20px)
+            transform: translateY(-25px)
             opacity: 1
 
     .inner
@@ -245,7 +259,22 @@
       transform-origin: 50% 30%
       // transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275)
       transform: perspective(500px) rotateX(0deg)
-      z-index: -1
+      // position: relative
+      // z-index: -1
+      &::after
+        content: ''
+        position: absolute
+        height: 100%
+        width: 100%
+        top: 0
+        left: 0
+        // background-image: linear-gradient(top, transparent 60%, rgba(255,255,255,0.7))
+        // background-position: 0% 50%
+        // background-size: 100% 200%
+        box-shadow: 0 25px 40px -30px #000
+        transition: 0.3s
+        opacity: 0.1
+
 
     section.meta
       display: grid
@@ -282,10 +311,11 @@
         width: 40px
         border-radius: 50%
         margin-right: 15px
-        box-shadow: 0 2px 15px -5px #000
+        box-shadow: 0 2px 15px -5px #000, inset 0 -1px 0 1px rgba(#000,0.2)
         color: #fff
         background: $color4
         border: none
+        // border: 1px solid $color5
         &:hover
           background: darken($color4,10%)
 
