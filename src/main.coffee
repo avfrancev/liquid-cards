@@ -5,7 +5,6 @@ Vue.config.productionTip = false
 
 console.log __VERSION__
 
-
 new Vue(
   el: '#app'
   template: '<App/>'

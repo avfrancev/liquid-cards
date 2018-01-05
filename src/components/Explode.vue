@@ -1,14 +1,10 @@
 <template lang="pug">
   #explode
-    //- div(v-for="card in cards" :key="card.id")
-    //-   pre {{card}}
     avf-transition#cards(:style="{ display: cards.length > 0 ? 'grid' : 'none' }")
       .card(v-for="card,i in cards" :key="card.id" :id="'card-'+card.id" :avf-id="card.id"  )
-        //- pre {{card}}
         h1(v-if="!card.image_src" style="text-align:center")  😎
         .inner(v-if="card.image_src")
           section.thumb(:style="'background-image:url('+card.image_src+')'")
-          //- div {{card.image_src}}
           section.btn-group
             button(@click="removeCard(card)") &#9992;
             button(@click="removeCard(card)") &#9829;
@@ -18,9 +14,6 @@
             .info
               .title {{card.title}}
               .author by {{card.author}}
-          //- button(@click="drawCanvas") DRAW
-    //- #refresh(v-if="!loading && cards.length == 0")
-    //-   button(@click='fetchCards') refresh
 </template>
 
 <script lang="coffee">
@@ -49,38 +42,19 @@
 
           do (i) =>
 
-            # card = (_i for _i in @cards when _i.id is id)[0]
-
-            axios.get("https://source.unsplash.com/random?sig=#{i}", {
-              # method: 'GET'
-              # mode: 'no-cors'
-              # headers: {
-              #   'Access-Control-Allow-Origin': '*'
-              #   # 'Content-Type': 'application/json'
-              # }
-              # withCredentials: true
-              # credentials: 'same-origin'
-            }).then((x) =>
+            axios.get("https://source.unsplash.com/random?sig=#{i}").then((x) =>
               img = new Image
               img.onload = =>
                 id = new Date().getTime()+i
-                # @cardz.push
-                #   id: id
                 @cards.push
                   id: id
                   author: faker.name.findName()
                   avatar: faker.image.avatar()
                   title: faker.lorem.words()
                   image_src: x.request.responseURL
-                # @$set @cards, @cards.indexOf(card), {
-                #   card...
-                #   image_src: x.request.responseURL
-                # }
               img.src = x.request.responseURL
               return
             )
-            # ).catch (err) =>
-              # @$delete @cards, @cards.indexOf(card)
 
 
 
@@ -115,11 +89,8 @@
           y:"-=#{el.offsetHeight/2}"
           scale: '0'
           opacity: -1
-          # height: 0
           ease: Expo.easeInOut
-          # onComplete: -> console.log '---------'
           onComplete: =>
-            # card.canvas.c.remove()
             tl.set el, {transition: '10.5s'}
             @cards.splice @cards.indexOf(card), 1
         }, '-=1'
@@ -127,7 +98,6 @@
         tl.to card.canvas.circles, 3, {
           x: (cind) => card.canvas.circles[cind].dx
           y: (cind) => card.canvas.circles[cind].dy
-          # ease: Expo.easeInOut
           progress: 1
           onUpdate: card.canvas.animate.bind card.canvas
           onComplete: =>
@@ -204,21 +174,14 @@
 
 
   #cards
-    // display: flex
     max-width: 80vw
-    // flex-direction: row
     margin: 0 auto
-    // height: 100%
     display: grid
-    // display: inline-block
-    // grid-template-columns: repeat(3, 1fr)
     grid-template-columns: 1fr 1fr
     grid-column-gap: 50px
     grid-row-gap: 50px
-    // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
     justify-items: center
     align-items: center
-    // position: relative
 
 
     .card
@@ -229,27 +192,24 @@
         section.thumb
           transform-origin: 100% 100%
           transform: perspective(500px) rotateY(10deg) rotateX(0deg) scale(1.05)
-          // transform: rotateX(50deg)
-          // background-size: 120%
           &::after
             opacity: 1
-            // background-size: 100% 100%
 
         section.btn-group
           button
             transform: translateY(-25px)
             opacity: 1
+            @for $i from 1 through 3
+              &:nth-of-type(#{3-$i})
+                transition-delay: #{50 * $i}ms
 
     .inner
-      // font-family: 'Lobster', cursive
-      // position: relative
       overflow: hidden
       border-radius: 3px
       box-shadow: 0 12px 30px -10px rgba(#000,1)
       display: grid
       grid-template-rows: minmax(150px, calc(50vh - 140px)) auto
 
-      // grid-template-rows: 2fr 1fr 1fr
 
     section.thumb
       background-size: cover
@@ -257,10 +217,7 @@
       background-repeat: no-repeat
       transition: 0.4s
       transform-origin: 50% 30%
-      // transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275)
       transform: perspective(500px) rotateX(0deg)
-      // position: relative
-      // z-index: -1
       &::after
         content: ''
         position: absolute
@@ -268,9 +225,6 @@
         width: 100%
         top: 0
         left: 0
-        // background-image: linear-gradient(top, transparent 60%, rgba(255,255,255,0.7))
-        // background-position: 0% 50%
-        // background-size: 100% 200%
         box-shadow: 0 25px 40px -30px #000
         transition: 0.3s
         opacity: 0.1
@@ -297,13 +251,11 @@
         font-style: italic
 
     section.btn-group
-      // position: absolute
       height: 0
       text-align: right
       button
-        transition: transform 0.2s, opacity 0.2s, box-shadow 0.1s
+        transition: transform 0.3s, opacity 0.2s, box-shadow 0.2s
         transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275)
-        // transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55)
         opacity: 0
         cursor: pointer
         font-size: 1.5em
@@ -315,7 +267,6 @@
         color: #fff
         background: $color4
         border: none
-        // border: 1px solid $color5
         &:hover
           background: darken($color4,10%)
 
@@ -323,10 +274,6 @@
           background: $color3
           &:hover
             background: darken($color3,10%)
-
-        @for $i from 1 through 3
-          &:nth-of-type(#{$i})
-            transition-delay: #{50 * $i}ms
 
 
 
