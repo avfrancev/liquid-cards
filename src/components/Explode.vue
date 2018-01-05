@@ -44,7 +44,6 @@
 
     methods:
       fetchCards: ->
-        console.log @$metrika
         @loading = true
         for i in [0...@cardsCount]
 

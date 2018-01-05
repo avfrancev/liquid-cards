@@ -3,6 +3,8 @@ import App from './App'
 
 Vue.config.productionTip = false
 
+console.log __VERSION__
+
 
 new Vue(
   el: '#app'
