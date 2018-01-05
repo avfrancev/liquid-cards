@@ -103,7 +103,7 @@
           onComplete: =>
             card.canvas.c.remove()
             if @cards.length < 6
-              console.log @cardsCount = Math.floor(5 - Math.random()*5) or 2
+              @cardsCount = Math.floor(5 - Math.random()*5) or 2
               do @fetchCards
         }, '-=1'
 
